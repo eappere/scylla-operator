@@ -3,9 +3,11 @@ package resource
 import (
 	"fmt"
 	"path"
+	"strconv"
 	"strings"
 
 	scyllav1 "github.com/scylladb/scylla-operator/pkg/api/scylla/v1"
+	"github.com/scylladb/scylla-operator/pkg/cmd/scylla-operator/options"
 	"github.com/scylladb/scylla-operator/pkg/controller/scyllacluster/util"
 	"github.com/scylladb/scylla-operator/pkg/helpers"
 	"github.com/scylladb/scylla-operator/pkg/naming"
@@ -299,7 +301,15 @@ func StatefulSetForRack(r scyllav1.RackSpec, c *scyllav1.ScyllaCluster, existing
 									},
 								},
 								{
-									Name: "CPU_COUNT",
+									Name: "POD_NAMESPACE",
+									ValueFrom: &corev1.EnvVarSource{
+										FieldRef: &corev1.ObjectFieldSelector{
+											FieldPath: "metadata.namespace",
+										},
+									},
+								},
+								{
+									Name: naming.EnvVarCPU,
 									ValueFrom: &corev1.EnvVarSource{
 										ResourceFieldRef: &corev1.ResourceFieldSelector{
 											ContainerName: naming.ScyllaContainerName,
@@ -307,6 +317,10 @@ func StatefulSetForRack(r scyllav1.RackSpec, c *scyllav1.ScyllaCluster, existing
 											Divisor:       resource.MustParse("1"),
 										},
 									},
+								},
+								{
+									Name:  naming.EnvVarRackFromNode,
+									Value: strconv.FormatBool(options.GetSidecarOptions().RackFromNode),
 								},
 							},
 							Resources: r.Resources,

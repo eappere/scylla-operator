@@ -48,6 +48,25 @@ const (
 	ForceRedeploymentReasonAnnotation = "scylla-operator.scylladb.com/force-redeployment-reason"
 )
 
+// Environment Variables
+const (
+	EnvVarEnvVarPodName = "POD_NAME"
+	EnvVarPodNamespace  = "POD_NAMESPACE"
+	EnvVarCPU           = "CPU"
+	EnvVarRackFromNode  = "RACK_FROM_NODE"
+)
+
+// Recorder Values
+const (
+	// SuccessSynced is used as part of the Event 'reason' when a Cluster is
+	// synced.
+	SuccessSynced = "Synced"
+	// ErrResourceExists is used as part of the Event 'reason' when a
+	// Cluster fails to sync due to a resource of the same name already
+	// existing.
+	ErrSyncFailed = "ErrSyncFailed"
+)
+
 // Configuration Values
 const (
 	ScyllaContainerName          = "scylla"
